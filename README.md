@@ -1,1 +1,1 @@
-# NetworkInvenSystem
+# Network Inventory System (NIS)
