@@ -1,0 +1,554 @@
+<!-- Ref: https://github.com/creativetimofficial/material-dashboard -->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard | Network System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Prompt&family=Kanit&family=IBM+Plex+Sans+Thai&display=swap" rel="stylesheet">
+
+<!-- Semantic UI Core -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.js"></script>
+
+<!-- Semantic UI Alerts -->
+<link rel="stylesheet" href="https://ctechhindi.github.io/Semantic-UI-Alerts/dist/semantic-ui-alerts.css">
+<script src="https://ctechhindi.github.io/Semantic-UI-Alerts/dist/semantic-ui-alerts.js"></script>
+
+  <style>
+:root {
+  --sidebar-width: 200px;
+  --collapsed-width: 70px;
+  --bg: #f5f6fa;
+  --card: #fff;
+  --text: #333;
+  --primary: #1976d2;
+}
+
+body.dark {
+  --bg: #1e1e2f;
+  --card: #2c2c3c;
+  --primary: #90caf9;
+}
+
+body.dark:not(.custom-font) {
+  --text: #eee;
+}
+
+body.dark .sidebar {
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .menu:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark .sidebar-header i,
+body.dark .menu i,
+body.dark .menu span {
+  color: var(--text);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Prompt', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* === SIDEBAR === */
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--card);
+  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.sidebar.collapsed {
+  width: var(--collapsed-width);
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.sidebar-header i {
+  font-size: 1.6rem;
+  margin-right: 8px;
+}
+
+.sidebar-header span {
+  font-size: 1.2rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.sidebar.collapsed .sidebar-header span {
+  display: none;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  position: relative;
+}
+
+.menu:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+.menu i {
+  font-size: 1.3rem;
+  margin-right: 10px;
+}
+
+.menu span {
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.sidebar.collapsed .menu span {
+  display: none;
+}
+
+.bottom {
+  margin-top: auto;
+}
+
+.sidebar.collapsed .menu[title] {
+  position: relative;
+}
+
+.sidebar.collapsed .menu[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+  background: var(--card);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  animation: tooltipFade 0.3s forwards;
+  pointer-events: none;
+  z-index: 999;
+}
+
+@keyframes tooltipFade {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+
+/* === MAIN CONTENT === */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.collapsed ~ .main-content .topbar {
+  padding-left: 10px;
+}
+
+.topbar i.toggle-btn {
+  font-size: 1.6rem;
+  color: var(--primary);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.topbar i.toggle-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.welcome {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.content {
+  flex: 1;
+  padding: 40px;
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar.collapsed ~ .main-content .content {
+  margin-left: 0;
+}
+
+.topbar {
+  height: 50px;
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 20px 5px 10px; // Top, Right, Bottom, Left
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.user-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* ระยะห่างระหว่างข้อความกับปุ่ม */
+}
+
+.welcome {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.toggle-fullscreen {
+  font-size: 1.4rem;
+  color: var(--primary);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.toggle-fullscreen:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+    .font-style-dropdown {
+      position: relative;
+    }
+
+    .font-style-dropdown i {
+      font-size: 1.6rem;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    .font-menu {
+      position: absolute;
+      top: 120%;
+      right: 0;
+      background: var(--card);
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      min-width: 260px;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.95);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 999;
+    }
+
+    .font-style-dropdown.open .font-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+    }
+
+    .preview-text {
+      font-size: 1rem;
+      text-align: center;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px dashed var(--primary);
+      margin-bottom: 12px;
+      background: rgba(0,0,0,0.03);
+    }
+
+    select {
+      width: 100%;
+      padding: 6px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+    }
+
+    .color-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      justify-content: center;
+    }
+
+    .color-box {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 2px rgba(0,0,0,0.2);
+    }
+
+    .font-menu button {
+      margin-top: 8px;
+      padding: 6px 10px;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 6px;
+      width: 100%;
+      cursor: pointer;
+      font-family: 'Prompt', sans-serif;
+    }
+
+    .font-menu .confirm-btn {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .font-menu .reset-btn {
+      background: #d32f2f;
+      color: #fff;
+    }
+
+    .content {
+      padding: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <i class="bx bxs-network-chart"></i>
+        <span>Network System</span>
+      </div>
+
+      <div class="menu" title="หน้าหลัก"><i class='bx bxs-dashboard'></i><span>หน้าหลัก</span></div>
+      <div class="menu" title="ส่งซ่อม" onclick="goToRepair()"><i class='bx bxs-wrench'></i><span>ส่งซ่อม</span></div>
+      <div class="menu" title="ส่งคืนคลัง"><i class='bx bxs-business'></i><span>ส่งคืนคลัง</span></div>
+      <div class="menu" title="อุปกรณ์คงคลัง"><i class='bx bxs-box'></i><span>อุปกรณ์คงคลัง</span></div>
+      <div class="menu" title="งานจัดจ้าง"><i class='bx bxs-business'></i><span>งานจัดจ้าง</span></div>
+      <div class="menu" title="รายชื่อทีมงาน"><i class='bx bxs-group'></i><span>รายชื่อทีมงาน</span></div>
+      <div class="menu" title="รายงาน"><i class='bx bxs-report'></i><span>รายงาน</span></div>
+      <div class="menu" title="จัดการผู้ใช้งาน"><i class='bx bxs-user-account'></i><span>จัดการผู้ใช้งาน</span></div>
+      <i class='bx  bx-people-handshake'  ></i> 
+      <div class="bottom">
+        <div class="menu" title="ธีม" onclick="toggleDarkMode()">
+          <i id="modeIcon" class='bx bxs-sun'></i>
+          <span id="modeLabel">โหมดกลางวัน</span>
+        </div>
+        <div class="menu" title="ออกจากระบบ" onclick="logout()"><i class='bx bxs-log-out'></i><span>ออกจากระบบ</span></div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="topbar">
+        <i class="bx bx-menu toggle-btn" onclick="toggleSidebar()" title="เมนู"></i>
+
+<!-- ---------------------- Start Change Text Colors ---------------------- --> 
+
+      <div class="font-style-dropdown">
+        <i class="bx bx-palette" onclick="toggleFontMenu()" title="ตั้งค่าฟอนต์"></i>
+        <div id="fontMenu" class="font-menu">
+          <div class="preview-text" id="previewText">ตัวอย่างข้อความ</div>
+
+          <label>เลือกฟอนต์</label>
+          <select id="fontFamilySelector" onchange="previewFontFamily()">
+            <option value="'Prompt', sans-serif">Prompt</option>
+            <option value="'Kanit', sans-serif">Kanit</option>
+            <option value="'IBM Plex Sans Thai', sans-serif">IBM Plex Sans Thai</option>
+          </select>
+
+          <label>เลือกสีฟอนต์</label>
+          <div class="color-row">
+            <span class="color-box" style="background:#333;" onclick="selectFontColor('#333')"></span>
+            <span class="color-box" style="background:#1976d2;" onclick="selectFontColor('#1976d2')"></span>
+            <span class="color-box" style="background:#f8bbd0;" onclick="selectFontColor('#f8bbd0')"></span>
+            <span class="color-box" style="background:#009688;" onclick="selectFontColor('#009688')"></span>
+          </div>
+
+          <button class="confirm-btn" onclick="confirmFontSettings()">✅ ยืนยัน</button>
+          <button class="reset-btn" onclick="resetFontSettings()">♻️ รีเซ็ต</button>
+        </div>
+      </div>
+
+<!-- ---------------------- End Change Text Colors ---------------------- --> 
+  
+      <div class="user-controls">
+        <i class="bx bx-fullscreen toggle-fullscreen" onclick="toggleFullscreen()" title="โหมดเต็มจอ"></i>
+
+
+
+        <span class="welcome">ยินดีต้อนรับ Thapwarit</span>
+      </div>
+    </div>
+      <div class="content">
+        <h2>แดชบอร์ดหลัก</h2>
+        <p>คุณสามารถจัดการรายการซ่อม ตรวจสอบสถานะ และดูรายงานการใช้งานของระบบได้ที่นี่ครับ 🎯</p>
+      </div>
+    </div>
+
+<div class="ui basic modal" id="logoutModal">
+  <div class="ui icon header">
+    <i class="sign-out icon"></i>
+    คุณกำลังออกจากระบบ
+  </div>
+  <div class="content">
+    <p>ขอบคุณที่ใช้งานระบบ Network System</p>
+  </div>
+  <div class="actions">
+    <div class="ui red basic cancel inverted button" onclick="window.close()">
+      <i class="remove icon"></i> ปิดหน้าต่าง
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  <script>
+    const sidebar = document.getElementById("sidebar");
+const username = new URLSearchParams(window.location.search).get("user") || "ไม่ทราบ";
+
+document.querySelector(".welcome").textContent = "ยินดีต้อนรับ " + username;
+
+// === Sidebar Toggle ===
+function toggleSidebar() {
+  sidebar.classList.toggle("collapsed");
+}
+
+// === Dark Mode Toggle ===
+function toggleDarkMode() {
+  document.body.classList.toggle("dark");
+  const icon = document.getElementById("modeIcon");
+  const label = document.getElementById("modeLabel");
+  if (document.body.classList.contains("dark")) {
+    icon.className = "bx bxs-moon";
+    label.textContent = "โหมดกลางคืน";
+  } else {
+    icon.className = "bx bxs-sun";
+    label.textContent = "โหมดกลางวัน";
+  }
+}
+
+// === ปุ่มซ่อม ===
+function goToRepair() {
+  const url = "https://script.google.com/macros/s/WEB_APP_ID/exec?page=repair&user=" + encodeURIComponent(username);
+  window.location.href = url;
+}
+
+// === ออกจากระบบ ===
+function logout() {
+  $.suiAlert({
+    title: "ออกจากระบบสำเร็จ",
+    description: "ขอบคุณที่ใช้งานระบบ Network System",
+    type: "success",
+    time: "3",
+    position: "top-right"
+  });
+
+  setTimeout(() => {
+    window.close();
+  }, 3000);
+}
+
+// === เปิดเต็มจอ ===
+function toggleFullscreen() {
+  const icon = document.querySelector(".toggle-fullscreen");
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+    icon.classList.replace("bx-fullscreen", "bx-exit-fullscreen");
+  } else {
+    document.exitFullscreen();
+    icon.classList.replace("bx-exit-fullscreen", "bx-fullscreen");
+  }
+}
+
+// === ตั้งค่าสีฟอนต์ & ฟอนต์ ===
+let selectedFontColor = "#333";
+let selectedFontFamily = "'Prompt', sans-serif";
+
+window.addEventListener("DOMContentLoaded", () => {
+  const savedColor = localStorage.getItem("fontColor");
+  const savedFont = localStorage.getItem("fontFamily");
+
+  if (savedColor) {
+    document.documentElement.style.setProperty("--text", savedColor);
+    selectedFontColor = savedColor;
+    document.getElementById("previewText").style.color = savedColor;
+    document.getElementById("sampleText").style.color = savedColor;
+  }
+
+  if (savedFont) {
+    document.body.style.fontFamily = savedFont;
+    selectedFontFamily = savedFont;
+    document.getElementById("fontFamilySelector").value = savedFont;
+    document.getElementById("previewText").style.fontFamily = savedFont;
+    document.getElementById("sampleText").style.fontFamily = savedFont;
+  }
+});
+
+function toggleFontMenu() {
+  document.querySelector(".font-style-dropdown").classList.toggle("open");
+}
+
+function selectFontColor(color) {
+  selectedFontColor = color;
+  document.getElementById("previewText").style.color = color;
+}
+
+function previewFontFamily() {
+  selectedFontFamily = document.getElementById("fontFamilySelector").value;
+  document.getElementById("previewText").style.fontFamily = selectedFontFamily;
+}
+
+function confirmFontSettings() {
+  document.documentElement.style.setProperty('--text', selectedFontColor);
+  document.body.style.fontFamily = selectedFontFamily;
+  localStorage.setItem("fontColor", selectedFontColor);
+  localStorage.setItem("fontFamily", selectedFontFamily);
+  document.body.classList.add("custom-font");
+
+  document.getElementById("sampleText").style.color = selectedFontColor;
+  document.getElementById("sampleText").style.fontFamily = selectedFontFamily;
+
+  // 🔒 ปิด dropdown ด้วย transition นุ่ม ๆ
+  const dropdown = document.getElementById("fontMenu").closest(".font-style-dropdown");
+  dropdown.classList.remove("open");
+}
+
+function resetFontSettings() {
+  selectedFontColor = "#333";
+  selectedFontFamily = "'Prompt', sans-serif";
+  document.documentElement.style.setProperty('--text', selectedFontColor);
+  document.body.style.fontFamily = selectedFontFamily;
+  localStorage.removeItem("fontColor");
+  localStorage.removeItem("fontFamily");
+  document.getElementById("fontFamilySelector").value = selectedFontFamily;
+  document.getElementById("previewText").style.color = selectedFontColor;
+  document.getElementById("previewText").style.fontFamily = selectedFontFamily;
+  document.getElementById("sampleText").style.color = selectedFontColor;
+  document.getElementById("sampleText").style.fontFamily = selectedFontFamily;
+}
+  </script>
+</body>
+</html>
